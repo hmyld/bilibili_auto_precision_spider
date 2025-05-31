@@ -28,153 +28,10 @@ import pickle
         save_address (str): 保存位置
         now_cookies (dictionary): 可用cookies，记得更新
 """
-target_charas = [
-    "冰川日菜", "丸山彩", "白鹭千圣", "若宫伊芙", "大和麻弥" # Pastel*Palette
-    #"户山香澄", "花园多惠", "牛込里美", "山吹沙绫", "市谷有咲",  # Poppin'Party
-    #"美竹兰", "青叶摩卡", "上原绯玛丽", "宇田川巴", "羽泽鸫",  # Afterglow
-    #"凑友希那", "冰川纱夜", "今井莉莎", "宇田川亚子", "白金磷子",  # Roselia
-    #"弦卷心", "濑田薰", "北泽育美", "松原花音", "奥泽美咲",  # Hello, Happy World!
-    #"layer和奏瑞依", "lock朝日六花", "MASKING佐藤益木", "PAREO鳰原令王那", "CHU²珠手知由",  # RAISE A SUILEN
-    #"八潮瑠唯", "广町七深", "二叶筑紫", "桐谷透子",  # Morfonica
-    #"高松灯", "千早爱音", "要乐奈", "椎名立希", "长崎爽世", # MyGO!!!!!
-    #"丰川祥子", "喵梦", "若叶睦", "三角初华", "八幡海铃"  # Ave Mujica
-]#
+target_charas = []
 pages = 1
-# 保存位置
-save_address=f"C:\\Users\\DX110\\Desktop\\pictures_of_bangdream_charactor"
-# 可用cookies
-now_cookies = [
-    {
-        "name": "_uuid",
-        "value": "B4ADE186-1F84-11013-9E3D-87673F5D8F10D27922infoc",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1773844727,  # 2026-03-18 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "b_nut",
-        "value": "1742299130",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1777002530,  # 2026-04-22 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "bili_jct",
-        "value": "43ee2706761bc2d1e8dcf9444c844d8a",  # 已更新为最新值
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1758030022,  # 2025-11-20 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "bili_ticket",
-        "value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDgzMzIwMTIsImlhdCI6MTc0ODA3Mjc1MiwicGx0IjotMX0.mjKcJMXyPP041YMBN3v8ffa8ns_2BxI5gMbNNB0MTfc",  # 已更新为最新值
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1748331952,  # 2025-05-27 时间戳（对应 bili_ticket_expires 字段值）
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "bp_t_offset_3546872872438586",
-        "value": "1070453661462691840",  # 已更新为最新值
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1759441241,  # 2025-06-23 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "buvid3",
-        "value": "723332F9-6988-7856-6BEB-169BF843085C33332infoc",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1777002530,  # 2026-04-22 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "CURRENT_FNVAL",
-        "value": "2000",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1773942035,  # 2026-03-23 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "DedeUserID",
-        "value": "3546872872438586",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1758030022,  # 2025-11-20 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "DedeUserID__ckMd5",
-        "value": "f5166823f8de3e44",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1758030022,  # 2025-11-20 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "LIVE_BUVID",
-        "value": "AUTO4817421754878585",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1776826687,  # 2026-04-21 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "SESSDATA",
-        "value": "8dd0db5e%2C1763624815%2Cce1ab%2A52CjBaIrMNWU9AVqpRZN3xdZT54f7FbKRdlO7nsk_-sJdqMGFyIBesLA39FWUKpSBttG4SVmcyZUxmaEIxdmQ1NUFsdXY4UE1XblRHUGY4RG4wQ3hSZWxDSU1WOFp0WF80dXFEOTItOU4yeEM1OUR4SzUtOXhOcWdZd3NXNnl1cEFVLXNCTHllY1BBIIEC",  # 已更新为最新值
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1763624815,  # 注意：根据 SESSDATA 字段的 expires 值（2025-11-20 可能已过期，需确认最新有效期）
-        "httpOnly": True,
-        "secure": True,
-        "sameSite": "Strict"
-    },
-    {
-        "name": "buvid_fp",
-        "value": "f5b7b30a93d5d06df74088bcf76bfc5c",
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1777002528,  # 2026-04-22 时间戳
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-    {
-        "name": "browser_resolution",
-        "value": "1912-924",  # 已更新为最新分辨率
-        "domain": ".bilibili.com",
-        "path": "/",
-        "expires": 1773942053,  # 2026-05-24 时间戳（注意：当前时间为 2025-05-24，该过期时间在未来）
-        "httpOnly": False,
-        "secure": False,
-        "sameSite": "Lax"
-    },
-]
+save_address=f""
+now_cookies = []
 
 # 1.2 格式转换相关
 """
@@ -182,7 +39,7 @@ now_cookies = [
     参数:
         target_file (str): 要转换的文件夹
 """
-target_file = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
+target_file = r''
 
 # 1.3 删除重复相关
 """
@@ -194,7 +51,7 @@ target_file = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
         min_size (int): 最小文件大小(KB)，小于此大小的文件会被忽略
         threshold (int): 汉明距离阈值，0相当于只用MD5，越大越宽松
 """
-r_root_dir = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
+r_root_dir = r''
 r_dry_run = False
 r_interactive = False
 r_min_size = 5
@@ -208,7 +65,7 @@ r_threshold = 5
         size_threshold (int): 文件大小阈值（字节），默认为15KB
         interact (bool): 开启删除确认
 """
-d_target_dir = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
+d_target_dir = r''
 d_size_threshold = 15
 d_interact = False
 
@@ -225,7 +82,7 @@ d_interact = False
         n_clisters (int): K-means法参数
         max_iter (int): K-means法参数
 """
-b_root_dir=b_root_dir = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
+b_root_dir=b_root_dir = r''
 b_methods = ["threshold", "gaussian", "kmeans"]
 d_kernel_size=(3, 3),
 d_sigma=1.0,
@@ -247,10 +104,10 @@ d_max_iter=100
         dry_run: 是否只预览不执行实际操作
 """
 o_input_size = (224, 224)
-o_root_dir = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
-o_model_path = r"C:\Users\DX110\Desktop\model_of_bangdream_charactor_identify\anime_char_model.h5"
-o_preprocessing_params_path = r"C:\Users\DX110\Desktop\model_of_bangdream_charactor_identify\preprocessing_params.pkl"
-o_train_dir = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'
+o_root_dir = r''
+o_model_path = r""
+o_preprocessing_params_path = r""
+o_train_dir = r''
 o_output_dir = None
 o_threshold = 0
 o_target_size = o_input_size
@@ -576,7 +433,7 @@ def delete_small_begin():
 # 6. 降噪处理
 #####################
 """
-    没有日志，AI写的，基本没用过
+    没有日志。
 """
 # 高斯滤波
 def gaussian_filter(img_path, kernel_size=(5, 5), sigma=0):
@@ -697,60 +554,6 @@ def denoise_begin():
 #####################
 """
     突发奇想的算法
-    对于五维向量，进行清洗测试，数据如下
-
-    训练一个识别bangdream企划中乐队pastel*palette五名成员 丸山彩 冰川日菜 白鹭千圣 大和麻弥 若宫伊芙 的计算机视觉模型
-
-    说明：第二次训练图片来源于人工筛选和第一次清洗结果。由于每次爬虫都是爬取相同网页，所以后续清洗会出现某些训练图片数量数据增长很多而某些几乎无增长
-
-    组名    首次训练图片    首次模型测试数量    首次模型测试准确数量    首次测试模型准确度    首次清洗结果数量    首次清洗准确度    第二次训练图片    第二次清洗结果数量    第二次清洗准确数量    第二次清洗准确率    第二次模型测试数量    第二次模型测试准确数量    第二次模型测试准确度
-   丸山彩      198                74                   29                39.19%             统计失败*         统计失败           395                31                   21                67.74%               74                      7                   9.46%
-  冰川日菜     269               256                  112                43.75%                                                 339               102                   98                96.08%              256                    197                  76.95%
-  白鹭千圣     487               463                  337                72.79%                                                 531               148                  148               100.00%              463                    155                  33.48%
-  大和麻弥     367               353                  102                28.90%                                                 416                99                   85                85.86%              353                     86                  24.36%
-  若宫伊芙     382               172                   52                30.23%                                                 488               278*                 199                71.58%              172                     86                  50.00%
-                                                                                        *注：忘记统计                                            *注：这是白毛，导致一堆类似角色因为图片颜色/构图/灯光/背景等问题无法识别。人眼也难识别。
-    数据说明：首次训练图片手动降噪。第0组为少数据训练组，第1组为特征明显组，第2组为大量数据组，第3组为对照组，第4组为特征不明显组。第二次训练图片为第一次加第一次筛选图片合并去重。
-    对于特征明显的实验组，运行该方法进行训练数据的获取与清洗再次训练可以提升模型准确度。
-    对于已经接近过拟合的实验组，该方法将会变成一个高效准确的爬虫
-    <notice>: 进一步实验将把首次训练图片完全采用爬来并初次降噪的数据拿来训练
-
-    数据分析：
-
-    特征明显组（冰川日菜）的有效性
-    对比第1组的两次模型准确度数据
-    推测原因：人工筛选与首次清洗结果合并后，有效样本占比增加，模型能更精准捕捉关键特征。
-
-    过拟合组（白鹭千圣）的爬虫化现象
-    对比第2组和第3组
-    首次模型准确度72.79%（可能已经过拟合），第二次清洗准确率100%，模型测试准确度暴跌至33.48%。
-    推测原因：过拟合模型对训练数据过度依赖，清洗后新增数据与原模型特征空间不匹配，导致泛化能力下降，清洗过程仅成为数据爬取工具，未提升模型质量。
-
-    少数据组（丸山彩）的异常表现
-    第二次清洗准确率67.74%（较低数据），模型测试准确度从39.19% 降至9.46%。
-    推测原因：首次训练数据手动降噪后特征纯净，但有效特征不足，二次训练合并时引入大量噪声。
-
-    特征不明显组（若宫伊芙）的挑战
-    标注问题：因 “白毛特征” 导致人难以识别，清洗准确率71.58%，反映特征模糊场景需依赖更精细的标注规则（如颜色阈值、构图模板）。
-    模型提升有限：测试准确度从30.23% 提升至50%，表明即使数据量增加，特征模糊仍制约模型上限。
-
-    对照组（大和麻弥）的基准价值
-    数据对比：首次/二次训练准确度分别为28.90%/24.36%，与少数据组（丸山彩）相比，显示初始数据量差异可能导致过拟合风险（丸山彩数据少但首次准确度更高）。
-
-
-    下一步实验计划
-    验证假设：使用完全未手动降噪的爬取数据进行首次训练（原计划），对比 “纯爬虫数据 + 清洗” 与 “手动降噪数据” 的模型表现，明确数据预处理的必要性。
-    
-    AI提出的技术优化：
-    对特征模糊组（如若宫伊芙）增加多模态特征提取（如 OCR 文本标签、视频帧动态特征）。
-    针对过拟合风险，引入数据增强算法（如旋转、亮度变换）扩展训练集多样性。
-    标注体系升级：建立 “特征权重评分表”，对颜色、构图、背景等维度量化打分，减少人工标注主观误差。
-
-    核心启示：1.数据清洗的价值高度依赖特征可分性与初始数据质量，后续实验需强化特征工程与自动化标注规则，降低人工干预成本。
-             2.模型质量对该方法可能有重要影响，推测为第二组特征明显导致模型拟合能力强。
-    
-    应用方向：1.可以多次训练，来爬取特征异常明显的图片。
-             2.数据表明该方法对于模型预测能力提升有积极影响。
 """
 
 # 算法类
