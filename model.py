@@ -17,9 +17,9 @@ import pickle
 IMAGE_SIZE = (224, 224)  # 输入图像尺寸
 BATCH_SIZE = 32  # 批次大小
 EPOCHS = 50  # 增加总训练轮次
-TRAIN_DIR = r'C:\Users\DX110\Desktop\pictures_of_bangdream_charactor'  # 训练数据路径
-MODEL_PATH = r'C:\Users\DX110\Desktop\model_of_bangdream_charactor_identify\anime_char_model.h5'  # 模型保存路径
-PREPROCESSING_PARAMS_PATH = r'C:\Users\DX110\Desktop\model_of_bangdream_charactor_identify\preprocessing_params.pkl'  # 预处理参数保存路径
+TRAIN_DIR = r''  # 训练数据路径
+MODEL_PATH = r''  # 模型保存路径
+PREPROCESSING_PARAMS_PATH = r''  # 预处理参数保存路径
 
 # ==============
 # 2. 数据准备（增强和预处理 + 类别权重计算）
@@ -253,7 +253,7 @@ def predict_image(model, image_path, class_indices):
 def main():
     """主函数：训练或加载模型并进行预测"""
     # 解析命令行参数
-    parser = argparse.ArgumentParser(description='动漫人物识别程序')
+    parser = argparse.ArgumentParser(description='识别程序')
     parser.add_argument('--train', action='store_true', help='训练模型')
     parser.add_argument('--predict', type=str, help='预测图像路径')
     args = parser.parse_args()
@@ -284,7 +284,7 @@ def main():
         
         predicted_class, confidence = predict_image(model, args.predict, class_indices)
         if confidence<20:
-            print("这不是BanG Dream 企划下Pastel*Palette乐队的成员！")
+            print("没有匹配选项！")
         print(f"\n最终预测结果: {predicted_class}，置信度: {confidence:.2f}%")
 
 if __name__ == "__main__":
